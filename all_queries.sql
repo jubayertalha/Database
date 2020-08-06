@@ -90,3 +90,29 @@ SELECT ename AS "Name", DECODE(comm, NULL, 'No Commission.', 0, 'No Commission',
 
 9-
 SELECT ename || '    ' || RPAD('*',ROUND(sal/100),'*') AS "EMPLOYEE_AND_THEIR_SALARIES" FROM emp ORDER BY sal DESC;
+
+
+
+
+----------------------Lecture 8-------------------------------------------------
+
+1-
+SELECT ROUND(AVG(sal),2) AS "Avarage", MAX(sal) AS "Maximum", MIN(sal) AS "Minimum" FROM emp;
+
+2-
+SELECT deptno AS "Department Number", ROUND(AVG(sal),2) AS "Avarage", MAX(sal) AS "Maximum", MIN(sal) AS "Minimum" FROM emp GROUP BY deptno;
+
+3-
+SELECT job AS "Job Category", ROUND(AVG(sal),2) AS "Avarage", MAX(sal) AS "Maximum", MIN(sal) AS "Minimum" FROM emp GROUP BY job;
+
+4-
+SELECT ename AS "Name", sal AS "Salary" FROM emp WHERE sal = (SELECT MAX(sal) FROM emp WHERE LOWER(job) = 'manager') AND LOWER(job) = 'manager';
+
+5-
+SELECT deptno AS "Department Number", dname AS "Department Name", loc AS "Department Location" FROM dept WHERE deptno = (SELECT deptno FROM emp GROUP BY deptno HAVING COUNT(deptno)=(SELECT MAX(COUNT(*)) FROM emp GROUP BY deptno));
+
+6-
+SELECT job FROM emp GROUP BY job HAVING SUM(NVL2(comm, comm+sal, sal)) = (SELECT MAX(SUM(NVL2(comm, comm+sal, sal))) FROM emp GROUP BY job);
+
+7-
+select ename, deptno FROM emp WHERE sal = (SELECT MAX(sal) FROM emp);
