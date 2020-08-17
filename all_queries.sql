@@ -116,3 +116,29 @@ SELECT job FROM emp GROUP BY job HAVING SUM(NVL2(comm, comm+sal, sal)) = (SELECT
 
 7-
 select ename, deptno FROM emp WHERE sal = (SELECT MAX(sal) FROM emp);
+
+
+
+
+----------------------Lecture 9-------------------------------------------------
+
+1-
+CREATE  TABLE Student(s_id NUMBER, s_name VARCHAR(20), phone NUMBER, address  VARCHAR(50), email VARCHAR(30), credit_completed NUMBER(3), course_completed NUMBER(2), cgpa NUMBER);
+
+2-
+ALTER TABLE Student ADD(department VARCHAR(5), gender VARCHAR(6));
+
+3-
+ALTER TABLE Student RENAME COLUMN department TO dept;
+
+4-
+ALTER TABLE Student MODIFY(cgpa NUMBER(3,2));
+
+5-
+ALTER TABLE Student DROP COLUMN email;
+
+6-
+RENAME Student TO Students;
+
+--
+DESCRIBE Students;
