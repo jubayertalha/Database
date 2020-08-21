@@ -141,4 +141,32 @@ ALTER TABLE Student DROP COLUMN email;
 RENAME Student TO Students;
 
 --
-DESCRIBE Students;
+CREATE TABLE department(deptid NUMBER(3) PRIMARY KEY, dept_name VARCHAR(6) CHECK(dept_name IN('CSE','EEE','BBA','Eng','Ach')), budget NUMBER(6) DEFAULT(0));
+
+--
+CREATE TABLE course(crs_id NUMBER(4) PRIMARY KEY, crs_name VARCHAR2(20) NOT NULL, dept_id NUMBER(3), CONSTRAINT cfor FOREIGN KEY(dept_id) REFERENCES department(deptid));
+
+7-
+INSERT INTO department(deptid, dept_name, budget) VALUES(123, 'CSE', 500000);
+
+INSERT INTO department(deptid, dept_name, budget) VALUES(124, 'EEE', 600000);
+
+INSERT INTO department(deptid, dept_name) VALUES(125, 'BBA');
+
+INSERT INTO department VALUES(126, 'Eng', 800000);
+
+8-
+INSERT INTO course(crs_id, crs_name, dept_id) VALUES(223, 'Database', 123);
+
+INSERT INTO course(crs_id, crs_name, dept_id) VALUES(224, 'Java', 123);
+
+INSERT INTO course(crs_id, crs_name, dept_id) VALUES(225, 'Accounting', 125);
+
+9-
+INSERT INTO department(dept_name, budget) VALUES('Ach', 900000);
+
+10-
+UPDATE department SET budget = 4000 WHERE dept_name LIKE 'CSE';
+
+11-
+TRUNCATE TABLE course;
