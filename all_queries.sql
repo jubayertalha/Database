@@ -164,9 +164,51 @@ INSERT INTO course(crs_id, crs_name, dept_id) VALUES(225, 'Accounting', 125);
 
 9-
 INSERT INTO department(dept_name, budget) VALUES('Ach', 900000);
+(invalid)
 
 10-
 UPDATE department SET budget = 4000 WHERE dept_name LIKE 'CSE';
 
 11-
 TRUNCATE TABLE course;
+
+
+
+
+----------------------Lecture 10-------------------------------------------------
+
+1-
+CREATE TABLE department(deptid NUMBER(3) PRIMARY KEY, dept_name VARCHAR(6) CHECK(dept_name IN('CSE','EEE','BBA','Eng','Ach')), budget NUMBER(6) DEFAULT(0));
+
+2-
+CREATE TABLE course(crs_id NUMBER(4) PRIMARY KEY, crs_name VARCHAR2(20) NOT NULL, dept_id NUMBER(3), CONSTRAINT cfor FOREIGN KEY(dept_id) REFERENCES department(deptid));
+
+3-
+CREATE  TABLE student(s_id NUMBER, s_name VARCHAR(20), phone NUMBER, address  VARCHAR(50), email VARCHAR(30), credit_completed NUMBER(3), course_completed NUMBER(2), cgpa NUMBER, deptno NUMBER(5), gender VARCHAR(6));
+
+4-
+ALTER TABLE student ADD CONSTRAINT s_id PRIMARY KEY(s_id);
+
+5-
+ALTER TABLE student MODIFY s_name NOT NULL;
+
+6-
+ALTER TABLE student ADD CONSTRAINT email UNIQUE(email);
+
+7-
+ALTER TABLE student ADD CONSTRAINT deptno FOREIGN KEY(deptno) REFERENCES department(deptid);
+
+8-
+ALTER TABLE student ADD CONSTRAINT gender CHECK(gender IN ('M', 'F'));
+
+9-
+ALTER TABLE student DISABLE CONSTRAINT s_id;
+
+10-
+ALTER TABLE student DROP CONSTRAINT gender;
+
+11-
+SELECT constraint_name, column_name FROM user_cons_columns WHERE table_name = 'STUDENT';
+
+12-
+ALTER TABLE student ENABLE CONSTRAINT s_id;
