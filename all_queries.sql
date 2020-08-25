@@ -120,6 +120,11 @@ select ename, deptno FROM emp WHERE sal = (SELECT MAX(sal) FROM emp);
 
 
 
+------------------------MID END-------------------------------------------------
+
+
+
+
 ----------------------Lecture 9-------------------------------------------------
 
 1-
@@ -212,3 +217,53 @@ SELECT constraint_name, column_name FROM user_cons_columns WHERE table_name = 'S
 
 12-
 ALTER TABLE student ENABLE CONSTRAINT s_id;
+
+
+
+
+----------------------Lecture 11 & 12---------------------------------------------
+
+1-
+SELECT * FROM emp WHERE sal > ALL(SELECT sal FROM emp WHERE job = 'MANAGER');
+
+2-
+SELECT * FROM emp WHERE sal > ANY(SELECT sal FROM emp WHERE job = 'MANAGER') AND job <> 'MANAGER';
+
+3-
+SELECT empno AS "Employee Number", job AS "Job", sal AS "Salaries" FROM emp WHERE sal > ANY(SELECT sal FROM emp WHERE job = 'MANAGER') AND job = 'ANALYST';
+
+4-
+SELECT * FROM emp WHERE deptno = (SELECT deptno FROM dept WHERE loc = 'DALLAS');
+
+5-
+SELECT dname AS "Department Name", loc AS "Location" FROM dept WHERE deptno = ANY(SELECT deptno FROM emp WHERE mgr = (SELECT empno FROM emp WHERE ename = 'CLARK'));
+
+6-
+SELECT * FROM dept WHERE deptno = ANY(SELECT deptno FROM emp WHERE job = 'MANAGER');
+
+7-
+SELECT MAX(sal) AS "First Maximum Salary" FROM emp;
+
+8-
+SELECT MAX(sal) AS "Second Maximum Salary" FROM emp WHERE sal < (SELECT MAX(sal) FROM emp);
+
+9-
+SELECT MAX(sal) AS "Third Maximum Salary" FROM emp WHERE sal < (SELECT MAX(sal) FROM emp WHERE sal < (SELECT MAX(sal) FROM emp));
+
+10-
+SELECT * FROM emp WHERE job IN('MANAGER', 'CLERK') AND deptno = ANY(SELECT deptno FROM dept WHERE dname IN('ACCOUNTING', 'SALES'));
+
+11-
+SELECT * FROM emp WHERE job = 'SALESMAN' AND deptno <> (SELECT deptno FROM dept WHERE loc = 'DALLAS');
+
+12-
+SELECT * FROM emp WHERE deptno = (SELECT deptno FROM emp WHERE ename = 'SCOTT');
+
+13-
+SELECT * FROM emp WHERE sal = (SELECT sal FROM emp WHERE ename = 'SMITH') AND ename <> 'SMITH';
+
+14-
+SELECT * FROM emp WHERE comm IS NOT NULL AND comm > 0 AND deptno = (SELECT deptno FROM dept WHERE dname = 'SALES') AND TRIM(TO_CHAR(hiredate, 'DAY')) IN('SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY');
+
+15-
+SELECT * FROM emp WHERE sal > (SELECT AVG(sal) FROM emp);
