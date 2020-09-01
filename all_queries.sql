@@ -251,7 +251,7 @@ SELECT MAX(sal) AS "Second Maximum Salary" FROM emp WHERE sal < (SELECT MAX(sal)
 SELECT MAX(sal) AS "Third Maximum Salary" FROM emp WHERE sal < (SELECT MAX(sal) FROM emp WHERE sal < (SELECT MAX(sal) FROM emp));
 
 10-
-SELECT * FROM emp WHERE job IN('MANAGER', 'CLERK') AND deptno = ANY(SELECT deptno FROM dept WHERE dname IN('ACCOUNTING', 'SALES'));
+SELECT * FROM emp WHERE job IN('MANAGER', 'CLERK') AND deptno = ANY(SELECT deptno FROM dept WHERE dname IN('ACCOUNTING', 'MARKETING'));
 
 11-
 SELECT * FROM emp WHERE job = 'SALESMAN' AND deptno <> (SELECT deptno FROM dept WHERE loc = 'DALLAS');
@@ -263,7 +263,57 @@ SELECT * FROM emp WHERE deptno = (SELECT deptno FROM emp WHERE ename = 'SCOTT');
 SELECT * FROM emp WHERE sal = (SELECT sal FROM emp WHERE ename = 'SMITH') AND ename <> 'SMITH';
 
 14-
-SELECT * FROM emp WHERE comm IS NOT NULL AND comm > 0 AND deptno = (SELECT deptno FROM dept WHERE dname = 'SALES') AND TRIM(TO_CHAR(hiredate, 'DAY')) IN('SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY');
+SELECT * FROM emp WHERE comm IS NOT NULL AND comm > 0 AND deptno = (SELECT deptno FROM dept WHERE dname = 'MARKETING') AND TRIM(TO_CHAR(hiredate, 'DAY')) IN('SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY');
 
 15-
 SELECT * FROM emp WHERE sal > (SELECT AVG(sal) FROM emp);
+
+
+
+
+----------------------Lecture 13 & 15---------------------------------------------
+
+1-
+SELECT * FROM emp, dept WHERE emp.deptno = dept.deptno AND dept.dname IN('ACCOUNTING', 'MARKETING') AND emp.job IN('MANAGER', 'CLERK');
+
+2-
+SELECT * FROM emp, dept WHERE emp.deptno = dept.deptno AND dept.loc <> 'DALLAS' AND emp.job = 'SALESMAN';
+
+3-
+SELECT d.dname AS "Department Name", d.loc AS "Department Location" FROM emp e, dept d, emp m WHERE e.deptno = d.deptno AND m.ename = 'CLARK' AND m.empno = e.mgr;
+
+4-
+SELECT dept.* FROM emp, dept WHERE dept.deptno = emp.deptno AND emp.job = 'MANAGER';
+
+5-
+SELECT * FROM emp, dept WHERE emp.deptno = dept.deptno AND dept.loc = 'DALLAS';
+
+6-
+DELETE FROM dept WHERE dept.deptno = (SELECT dept.deptno FROM emp, dept WHERE emp.deptno(+) = dept.deptno AND emp.deptno IS NULL);
+
+7-
+SELECT DISTINCT dept.*, NVL2(TO_CHAR(emp.deptno), 'Has Employee', 'No Employee') AS "Employee Status" FROM dept, emp WHERE emp.deptno(+) = dept.deptno ORDER BY dept.deptno ASC;
+
+8-
+SELECT * FROM emp, dept WHERE emp.deptno(+) = dept.deptno;
+
+9-
+SELECT dept.* FROM emp, dept WHERE emp.deptno(+) = dept.deptno AND emp.deptno IS NULL;
+
+10-
+SELECT e.ename AS "Employee Name", NVL(m.ename, 'CEO') AS "Manager" FROM emp e, emp m WHERE e.mgr = m.empno(+);
+
+11-
+SELECT e.* FROM emp e, emp s WHERE s.ename = 'SCOTT' AND s.deptno = e.deptno;
+
+12-
+SELECT e.* FROM emp e, emp m WHERE m.empno = e.mgr AND m.hiredate > e.hiredate;
+
+13-
+SELECT e.* FROM emp e, emp m WHERE m.empno = e.mgr AND m.sal < e.sal;
+
+14-
+SELECT e1.* FROM emp e1, emp e2 WHERE e1.sal = e2.sal AND e1.empno <> e2.empno ORDER BY e1.sal ASC;
+
+15-
+SELECT e.ename AS "Employee Name", e.hiredate AS "Employee Hiredate", m.ename AS "Manager", m.hiredate AS "Manager Hiredate" FROM emp e, emp m, emp s WHERE m.empno = e.mgr AND s.ename = 'SMITH' AND s.sal = e.sal AND e.ename <> 'SMITH';
