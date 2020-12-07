@@ -36,7 +36,7 @@ SELECT ename AS "Name", job AS "Jobs", hiredate AS "Start Date" FROM emp WHERE h
 SELECT ename AS "Name", deptno AS "Department Number" FROM emp WHERE deptno = 10 OR deptno = 30 ORDER BY ename ASC;
 
 6-
-SELECT ename AS "Employee", sal AS "Monthly Salary" FROM emp WHERE sal > 1500 AND ( deptno = 10 OR deptno = 30 );
+SELECT ename AS "Employee", sal AS "Monthly Salary" FROM emp WHERE sal  > 1500 AND ( deptno = 10 OR deptno = 30 );
 
 7-
 SELECT ename AS "Name", hiredate AS "Higher Date" FROM emp WHERE EXTRACT( YEAR FROM hiredate ) = 1982;
@@ -317,3 +317,48 @@ SELECT e1.* FROM emp e1, emp e2 WHERE e1.sal = e2.sal AND e1.empno <> e2.empno O
 
 15-
 SELECT e.ename AS "Employee Name", e.hiredate AS "Employee Hiredate", m.ename AS "Manager", m.hiredate AS "Manager Hiredate" FROM emp e, emp m, emp s WHERE m.empno = e.mgr AND s.ename = 'SMITH' AND s.sal = e.sal AND e.ename <> 'SMITH';
+
+
+
+
+----------------------Final Project---------------------------------------------
+
+1-
+CREATE TABLE phoneNumbers(user_id NUMBER(11) CONSTRAINT pk PRIMARY KEY, phoneNumber NUMBER(11));
+
+DESCRIBE phoneNumbers;
+
+3-
+CREATE TABLE userAddress(road_number NUMBER(2) CONSTRAINT apk PRIMARY KEY, road_name VARCHAR(20), area VARCHAR(20), city VARCHAR(20));
+
+DESCRIBE userAddress;
+
+2-
+CREATE TABLE userData(user_id number(11) CONSTRAINT dpk PRIMARY KEY, user_name VARCHAR(20), user_dob DATE, road_number NUMBER(2), CONSTRAINT fk FOREIGN KEY(road_number) REFERENCES userAddress(road_number));
+
+DESCRIBE userData;
+
+4-
+CREATE TABLE friendList(user_id NUMBER(11) CONSTRAINT fpk PRIMARY KEY, friend_id NUMBER(11), CONSTRAINT ffk FOREIGN KEY(friend_id) REFERENCES userData(user_id));
+
+DESCRIBE friendList;
+
+6-
+CREATE TABLE messageData(message_id NUMBER(11) CONSTRAINT mdpk PRIMARY KEY, message_text VARCHAR(600), receiver_id NUMBER(11), CONSTRAINT mdfk FOREIGN KEY(receiver_id) REFERENCES userData(user_id));
+
+DESCRIBE messageData;
+
+5-
+CREATE TABLE messageList(user_id NUMBER(11) CONSTRAINT mlpk PRIMARY KEY, message_id NUMBER(11), CONSTRAINT mlfk FOREIGN KEY(message_id) REFERENCES messageData(message_id));
+
+DESCRIBE messageList;
+
+8-
+CREATE TABLE groupData(group_id NUMBER(11) CONSTRAINT gdpk PRIMARY KEY, group_name VARCHAR(20), group_type VARCHAR(20), opening_date DATE);
+
+DESCRIBE groupData;
+
+7-
+CREATE TABLE groupList(user_id NUMBER(11) CONSTRAINT glpk PRIMARY KEY, group_id NUMBER(11), CONSTRAINT glfk FOREIGN KEY(group_id) REFERENCES groupData(group_id));
+
+DESCRIBE groupList;
